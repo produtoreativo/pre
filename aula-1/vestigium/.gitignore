@@ -1,0 +1,6 @@
+/node_modules/
+/produtos/webshop/
+/produtos/webshop-api/
+/produtos/search-api/
+/produtos/order-mngt-api/
+.env

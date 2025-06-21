@@ -1,0 +1,48 @@
+# Observabilidade (O11Y) em todos os ambientes
+
+## Repositórios utilizados
+
+https://github.com/produtoreativo/webshop  
+https://github.com/produtoreativo/webshop-api  
+https://github.com/produtoreativo/search-api  
+https://github.com/produtoreativo/order-mngt-api  
+
+## Iniciado o teste
+
+1. Execute o setup para baixar todos os projetos.  
+
+```
+chmod +x setup.sh
+./setup.sh
+```
+
+1.1. Quando precisar, atualize os repositorios para pegar a versão mais recente.  
+```
+chmod +x update_all.sh
+./setup.sh
+```
+
+2. Execute os repos para funcionarem em paralelo.  
+```
+chmod +x start_all.sh
+./start_all.sh
+```
+
+3. Abra no navegador para verificar se está tudo ok.  
+http://localhost:5173/
+
+4. Execute os testes para verificar o funcionamento do NewRelic
+```
+npm run test:e2e
+```
+
+## Criar uma Dashboard com NRQL
+	1.	Acesse o New Relic One → Dashboards → Create a dashboard.
+	2.	Dê um nome como Erros - Consulta de Produto.
+	3.	Clique em “Add a chart”, selecione “NRQL query” e use:
+
+```
+SELECT count(*) FROM TransactionError 
+WHERE request.uri LIKE '%/products%' OR transactionName LIKE '%/products%' 
+SINCE 30 minutes ago TIMESERIES
+```

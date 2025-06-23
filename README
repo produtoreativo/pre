@@ -71,22 +71,39 @@ Clone o arquivo aula-1/vestigium/produtos/webshop/src/store/newrelic/options-exa
 
 1.1. Quando precisar, atualize os repositorios para pegar a versão mais recente.  
 ```sh
-chmod +x update_all.sh
-./setup.sh
+chmod +x update-all.sh
+./update-all.sh
 ```
 
 2. Execute os repos para funcionarem em paralelo.  
 ```sh
-chmod +x start_all.sh
-./start_all.sh
+chmod +x start-all.sh
+./start-all.sh
 ```
 
 3. Abra no navegador para verificar se está tudo ok.  
 http://localhost:5173/
 
 4. Execute os testes para verificar o funcionamento do NewRelic
+
+Em outra aba do terminal, garanta que o ambiente de testes está funcional, execute:
+
+```sh
+# Na raiz da pasta vestigium
+npm install
+````
+
+Então execute os testes em:
+
 ```sh
 npm run test:e2e
+```
+
+As vezes quando executa pela primeira vez depois de algum tempo, o NewRelic demora um pouco mais a responder e dá erro no teste.  
+Procure o trecho a seguir no arquivo [./aula-1/vestigium/tests/e2e/trace.integration.spec.ts](./aula-1/vestigium/tests/e2e/trace.integration.spec.ts) e incremente um pouco mais o tempo em milisegundos:
+
+```js
+await setTimeout(20000);
 ```
 
 ## Criar uma Dashboard com NRQL

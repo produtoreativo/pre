@@ -59,6 +59,16 @@ Este script baixa todos os projetos para dentro de uma pasta nomeada como "produ
 mkdir produtos
 ```
 
+O projeto que é uma Web Application, webshop, precisa de uma configuração específica do Elasticsearch:  
+ Vai no Menu BROWSER -> Add Data [canto superior direito da aba].   
+Pesquisa por "browser monitoring'.  
+Escolhe a opção "Place a JavaScript snippet in frontend code".
+Preencha as informações e no final salve esse snippet:
+
+![Browser Config](./assets/aula1-newrelic-2.png)
+
+Clone o arquivo aula-1/vestigium/produtos/webshop/src/store/newrelic/options-example.ts para aula-1/vestigium/produtos/webshop/src/store/newrelic/options.ts e substitua os valores pelos dados do Snippet que voce acabou de salvar.
+
 1.1. Quando precisar, atualize os repositorios para pegar a versão mais recente.  
 ```sh
 chmod +x update_all.sh

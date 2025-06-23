@@ -1,4 +1,4 @@
-# Observabilidade (O11Y) em todos os ambientes
+# Observabilidade (O11Y) em primeiro lugar
 
 ## Criar uma conta no NewRelic
 

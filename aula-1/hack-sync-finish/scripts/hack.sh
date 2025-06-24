@@ -23,6 +23,10 @@ git checkout -b "$BRANCH" dev
 echo "🔍 Status atual:"
 git status
 
+echo "🔍 Push para o servidor remoto:"
+git push -u origin "$BRANCH"
+
 # 📝 Atualizando a issue no GitHub
 echo "💬 Comentando na issue #$ISSUE"
 gh issue comment "$ISSUE" --body "🔨 Começando desenvolvimento na branch \`$BRANCH\`" || echo "⚠️ Falha ao comentar. Ignorando..."
+

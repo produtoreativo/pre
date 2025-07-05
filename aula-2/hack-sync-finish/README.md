@@ -35,6 +35,8 @@ Pode testar o status com:
 
 ## Fluxo Hack Sync Finish
 
+Existem projetos como o [https://www.git-town.com/](https://www.git-town.com/commands/hack.html) que trabalham o modelo.
+
 ### hack
 
 Listando as issues:

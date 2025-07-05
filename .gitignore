@@ -1,1 +1,9 @@
 .env.project
+
+aula-2/setup/magasiara/magento_data/
+
+aula-2/setup/magasiara/terraform/.terraform/
+aula-2/setup/magasiara/terraform/.terraform.lock.hcl
+aula-2/setup/magasiara/terraform/terraform.tfstate
+aula-2/setup/magasiara/terraform/terraform.tfstate.backup
+aula-2/setup/magasiara/terraform/terraform.tfvars

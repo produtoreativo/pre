@@ -1,0 +1,5 @@
+export DD_API_KEY=6c0014a727f0cecacc4b51e28dc44fce
+export DD_APP_KEY=91265a49205f0fa6a85199774815223813e9d4f0
+
+chmod +x send_group_metrics.sh
+./send_group_metrics.sh

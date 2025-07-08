@@ -34,11 +34,20 @@ resource "datadog_dashboard" "group_closure_dashboard" {
   }
 
   widget {
-    query_value_definition {
+    timeseries_definition {
       title     = "Tempo Médio até Encerramento"
-      autoscale = true
+      show_legend = true
       request {
-        q = "avg:group_buying.group.time_to_close{*}.rollup(avg, 300)"
+        q = "avg:group_buying.group.time_to_close{*}"
+        display_type = "line"
+        style {
+          palette = "dog_classic"
+        }
+      }
+      yaxis {
+        label = "Tempo (segundos)"
+        scale = "linear"
+        include_zero = true
       }
     }
   }

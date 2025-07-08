@@ -41,6 +41,13 @@ payload=$(cat <<EOF
       "type": "count",
       "tags": ["context:group_buying", "domain:adhesion", "env:dev"],
       "host": "simulated-ingestor"
+    },
+    {
+      "metric": "group_buying.group.time_to_close",
+      "points": [[$TIMESTAMP, 432000]],
+      "type": "gauge",
+      "tags": ["context:group_buying", "domain:closing", "env:dev"],
+      "host": "simulated-ingestor"
     }
   ]
 }

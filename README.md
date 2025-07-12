@@ -44,6 +44,17 @@ chmod +x send_group_metrics.sh
 
 ## Atualizando o vestigium
 
+Crie um arquivo .env dentro da pasta aula-2/vestigium com o conteúdo:
+```sh
+DD_API_KEY=[SUA DD_API_KEY]
+
+DD_AGENT_HOST=localhost
+DD_TRACE_AGENT_PORT=8126
+DD_ENV=development
+DD_SERVICE=search-api
+DD_VERSION=1.0.0
+```
+
 ```sh
 cd aula-2/vestigium
 chmod +x setup.sh start-all.sh update-all.sh
@@ -72,6 +83,17 @@ Colocar as credenciais do DataDog e executar com:
 
 Exercicio de casa criar um setup de testes de integração que cria produtos no Magento.  
 Observa as credenciais de acesso no [docker compose](./aula-2/setup/magasiara/docker-compose.yml) para acessar os recursos de Magento, Elasticsearch, etc.
+
+Crie um arquivo .env dentro da pasta aula-2/setup/magasiara com o conteúdo:
+```sh
+DD_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+DD_APP_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+
+Executa o terraform
+```sh
+docker compose up -d
+```
 
 Depois de criar alguns produtos, manualmente ou automaticamente, acessa em:
 ```sh

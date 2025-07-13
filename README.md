@@ -1,51 +1,97 @@
-# Observabilidade (O11Y) em primeiro lugar
+# 📊 Observabilidade (O11Y) em Primeiro Lugar
 
-Se quiser acessar a documentação da aula 1, precisa ir no [README da aula](./aula-1/README.md).
+Este guia apresenta o passo a passo para configurar a infraestrutura de observabilidade com DataDog utilizando Terraform, enviar métricas simuladas e testar integrações.
 
-Aula 2 inicia modelagem com DataDog, siga os passos seguintes para validar a estrutura.
+---
 
-## DataDog
+## 📚 Aula 1
 
-Precisa gerar uma API Key e uma Application Key em dois menus diferentes que encontra a partir do icone do usuário no canto inferior esquerdo em:
+Para consultar o conteúdo da Aula 1, acesse o [README da aula](./aula-1/README.md).
+
+---
+
+## 🧪 Aula 2 — Modelagem com DataDog
+
+Nesta etapa, vamos:
+
+1. Criar as chaves de autenticação do DataDog
+2. Configurar a infraestrutura com Terraform
+3. Injetar métricas simuladas para teste
+4. Rodar os serviços de backend com suporte ao DataDog
+5. Criar massa de dados para visualização
+
+---
+
+## 🔐 1. Criar as Chaves de API no DataDog
+
+Acesse o menu de usuário (canto inferior esquerdo) e gere:
+
+- Uma **API Key**
+- Uma **Application Key**
 
 ![API Keys](./assets/aula2-datadog-1.png)
 
-## Terraform
+---
 
-Estrutura inicial para criação dos nossos artefatos de Infra as a Code utilizando o Terraform para gerar toda a observabilidade do plano de Confiabilidade.
+## ⚙️ 2. Infraestrutura como Código com Terraform
 
-Antes de executar, crie um arquivo em /aula-2/setup/magasiara/terraform/terraform.tfvars
+### 📁 Arquivo `terraform.tfvars`
 
-Com o conteúdo:
-```sh
+Antes de executar o Terraform, crie o arquivo:
+
+```
+aula-2/setup/magasiara/terraform/terraform.tfvars
+```
+
+Com o seguinte conteúdo:
+
+```hcl
 datadog_api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 datadog_app_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 datadog_site    = "datadoghq.com"
 ```
 
-### Criar a Dashboard com os comandos
+### ▶️ Executar Terraform
 
-```sh
+```bash
 cd aula-2/setup/magasiara/terraform
 terraform init
 terraform plan
-terraform apply
+terraform apply -auto-approve
 ```
 
-### Ingestão dos dados para testar a Dashboard com
+---
 
-```sh
+## 📈 3. Enviar Métricas Simuladas para o Dashboard
+
+### 📁 Definir variáveis de ambiente 
+
+Exporte no terminal
+
+```bash
 export DD_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 export DD_APP_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+```
+ou crie um arquivo chamado .env em aula-2/setup/magasiara/
 
-chmod +x send_group_metrics.sh
-./send_group_metrics.sh
+
+### ▶️ Rodar script de simulação
+
+```bash
+# caminho aula-2/setup/magasiara/
+chmod +x simulate-group-buying-metrics.sh
+./simulate-group-buying-metrics.sh
 ```
 
-## Atualizando o vestigium
+---
 
-Crie um arquivo .env dentro da pasta aula-2/vestigium com o conteúdo:
-```sh
+## 🔄 4. Inicializar e Executar os Serviços (vestigium + webshop)
+
+Verificar todos os serviços indexados no DataDog
+
+### 📁 Arquivo `.env` em `aula-2/vestigium`
+
+```env
 DD_API_KEY=[SUA DD_API_KEY]
 
 DD_AGENT_HOST=localhost
@@ -55,58 +101,98 @@ DD_SERVICE=search-api
 DD_VERSION=1.0.0
 ```
 
-```sh
+### ▶️ Executar scripts
+
+```bash
 cd aula-2/vestigium
 chmod +x setup.sh start-all.sh update-all.sh
 
 ./setup.sh
 ```
 
-Clonar novamente com 
+> Para resetar:  
+> `./setup.sh` novamente.
 
-```sh
-./setup.sh
-```
+### ⚙️ Configurar o `webshop`
 
-No repo webshop, precisa clonar o arquivo:
-```sh
+```bash
 cp produtos/webshop/src/store/datadog/options-example.ts produtos/webshop/src/store/datadog/options.ts
 ```
 
-Colocar as credenciais do DataDog e executar com:
+Preencha com suas credenciais do DataDog, depois inicie os serviços:
 
-```sh
+```bash
 ./start-all.sh
 ```
 
-## Criar uma massa de dados
+---
 
-Exercicio de casa criar um setup de testes de integração que cria produtos no Magento.  
-Observa as credenciais de acesso no [docker compose](./aula-2/setup/magasiara/docker-compose.yml) para acessar os recursos de Magento, Elasticsearch, etc.
+## 🧪 5. Criar Massa de Dados no Magento
 
-Crie um arquivo .env dentro da pasta aula-2/setup/magasiara com o conteúdo:
-```sh
+### 📁 Arquivo `.env` em `aula-2/setup/magasiara`
+
+```env
 DD_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 DD_APP_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-Executa o terraform
-```sh
+### ▶️ Subir ambiente com Docker
+
+```bash
 docker compose up -d
 ```
 
-Depois de criar alguns produtos, manualmente ou automaticamente, acessa em:
-```sh
+### 🛒 Criar produtos
+
+Acesse manualmente ou automatize a criação de produtos para visualização no Dashboard:
+
+```bash
 http://localhost:5173/
 ```
 
-## Repositórios utilizados
+---
 
-Agregador de Confiabilidade:  
-https://github.com/produtoreativo/webshop 
+## 🗃️ Repositórios Utilizados
 
-Repositórios dos serviços:  
-https://github.com/produtoreativo/webshop  
-https://github.com/produtoreativo/webshop-api  
-https://github.com/produtoreativo/search-api  
-https://github.com/produtoreativo/order-mngt-api  
+- Agregador de Confiabilidade:  
+  https://github.com/produtoreativo/webshop  
+
+- Repositórios dos serviços:  
+  https://github.com/produtoreativo/tuangou
+  https://github.com/produtoreativo/webshop  
+  https://github.com/produtoreativo/webshop-api  
+  https://github.com/produtoreativo/search-api  
+  https://github.com/produtoreativo/order-mngt-api  
+
+---
+
+## 🎓 Extra 
+
+### Teste de Webhook no Discord
+
+Troque a URL para sua webhook real:
+
+```bash
+curl -X POST   -H "Content-Type: application/json"   -d '{"content": "🚨 *Teste de notificação do Datadog para o Discord!* 🚨"}'   https://discord.com/api/webhooks/XXXXXXXXXXXXXXX
+```
+
+### Criar um arquivo Terraform a partir de um recurso existente
+
+Buscar um recurso já existente como um monitor
+```sh
+curl -s \
+  -H "DD-API-KEY: $DD_API_KEY" \
+  -H "DD-APPLICATION-KEY: $DD_APP_KEY" \
+  "https://api.datadoghq.com/api/v1/monitor/177793603" \
+  -o monitor.json  
+```
+
+E usar o terraform para importar a partir do Resource [datadog_monitor_json ](https://registry.terraform.io/providers/DataDog/datadog/latest/docs/resources/monitor_json).  
+
+Muitos exemplos de como criar recursos do DataDog com Terraform
+https://github.com/DataDog/terraform-provider-datadog/tree/master/examples/resources
+
+
+---
+
+✅ Agora você está pronto para acompanhar a jornada de observabilidade completa do fluxo de compra coletiva com métricas, dashboards e alertas!

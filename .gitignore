@@ -1,6 +1,10 @@
 .env.project
 .env
 
+aula-2/send-message-to.discord.sh
+
+send-message-to.discord.sh
+
 aula-2/setup/magasiara/magento_data/
 
 aula-2/setup/magasiara/terraform/.terraform/

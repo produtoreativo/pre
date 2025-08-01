@@ -5,14 +5,45 @@ resource "datadog_dashboard" "group_buying_dashboard" {
 
   widget {
     group_definition {
-      title       = "🔴 Falhas na Formação dos Grupos"
+      title       = "🔴 Alertas de Formação de Grupos"
       layout_type = "ordered"
 
       widget {
         query_value_definition {
+          title = "Grupos criados nos últimos 5m"
+          title_size = "16"
+          title_align = "center"
+          precision = 0
+          request {
+            q          = "sum:group_buying.available_group.status.view{group:created}.rollup(sum, 300)"
+            aggregator = "sum"
+            conditional_formats {
+              comparator = "<"
+              value      = 10
+              palette    = "black_on_light_red"
+            }
+            conditional_formats {
+              comparator = ">="
+              value      = 10
+              palette    = "black_on_light_green"
+            }
+          }
+
+          autoscale = true
+        }
+      }
+
+    }
+  }
+  widget {
+    group_definition {
+      title       = "🔴 Falhas na Formação dos Grupos"
+      layout_type = "ordered"
+      widget {
+        query_value_definition {
           title = "Ofertas não indexadas"
           request {
-            q = "sum:group_buying.catalog.offer.view.failure{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.catalog.offer.view.failure{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -33,7 +64,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Falhas ao Adicionar ao Carrinho"
           request {
-            q = "sum:group_buying.shopcart.buybox.added.failure{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added.failure{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -54,7 +85,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Falhas ao Formar Grupo"
           request {
-            q = "sum:group_buying.available_group.status.failure{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.failure{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -75,7 +106,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Tentativa Criação"
           request {
-            q = "sum:group_buying.shopcart.buybox.added.failure{group:created}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added.failure{group:created}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -96,7 +127,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Tentativa de Adesão"
           request {
-            q = "sum:group_buying.shopcart.buybox.added.failure{group:adhesion}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added.failure{group:adhesion}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -117,7 +148,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Durante Criação ao Grupo"
           request {
-            q = "sum:group_buying.available_group.status.failure{group:created}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.failure{group:created}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -138,7 +169,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Durante Adesão ao Grupo"
           request {
-            q = "sum:group_buying.available_group.status.failure{group:adhesion}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.failure{group:adhesion}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -231,7 +262,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Ofertas indexadas"
           request {
-            q = "sum:group_buying.catalog.offer.view{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.catalog.offer.view{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = "<"
               value      = 100
@@ -257,7 +288,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Adicionados ao Carrinho"
           request {
-            q = "sum:group_buying.shopcart.buybox.added{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = "<"
               value      = 10
@@ -283,7 +314,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Eventos de Formação de Grupos"
           request {
-            q = "sum:group_buying.available_group.status.view{*}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.view{*}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -304,7 +335,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Durante Criação do Grupo"
           request {
-            q = "sum:group_buying.shopcart.buybox.added{group:created}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added{group:created}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -325,7 +356,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Durante Adesão ao Grupo"
           request {
-            q = "sum:group_buying.shopcart.buybox.added{group:adhesion}.rollup(sum, 3600)"
+            q = "sum:group_buying.shopcart.buybox.added{group:adhesion}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -346,7 +377,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Criação de Grupo"
           request {
-            q = "sum:group_buying.available_group.status.view{group:created}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.view{group:created}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0
@@ -367,7 +398,7 @@ resource "datadog_dashboard" "group_buying_dashboard" {
         query_value_definition {
           title = "Adesão ao Grupo"
           request {
-            q = "sum:group_buying.available_group.status.view{group:adhesion}.rollup(sum, 3600)"
+            q = "sum:group_buying.available_group.status.view{group:adhesion}.rollup(sum, 300)"
             conditional_formats {
               comparator = ">"
               value      = 0

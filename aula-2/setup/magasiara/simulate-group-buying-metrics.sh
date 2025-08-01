@@ -45,6 +45,16 @@ while true; do
 EOF
 )
 
+#   payload=$(cat <<EOF
+# {
+#   "series": [
+#     { "metric": "group_buying.available_group.status.view", "points": [[$timestamp, 1]], "type": "gauge", "tags": ["env:test", "group:created", "group_id:$GROUP_ID"], "host": "group-buying-bash" },
+#     { "metric": "group_buying.available_group.status.view", "points": [[$timestamp, 1]], "type": "gauge", "tags": ["env:test", "group:adhesion", "group_id:$GROUP_ID"], "host": "group-buying-bash" }
+#   ]
+# }
+# EOF
+# )
+
   curl -s -X POST "$DATADOG_API_URL" \
     -H "Content-Type: application/json" \
     -H "DD-API-KEY: $DD_API_KEY" \

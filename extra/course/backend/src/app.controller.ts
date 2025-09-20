@@ -12,11 +12,11 @@ export class AppController {
 
   @Get('health')
   healthCheck(): string {
-    return 'OK';
+    return this.appService.getHealth();
   }
 
   @Get('error')
   throwError(): void {
-    throw new Error('This is a test error');
+    this.appService.throwError();
   }
 }

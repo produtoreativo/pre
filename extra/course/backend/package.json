@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "course-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -17,12 +17,21 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "start:watch:dd-dev": "npm run start:dev --entryFile main.with-dd",
+    "start:watch:dd": "ts-node --respawn --transpile-only src/main.with-dd.ts"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/swagger": "^11.2.0",
+    "dd-trace": "^5.67.0",
+    "nestjs-pino": "^4.4.0",
+    "pino-datadog-transport": "^3.0.6",
+    "pino-http": "^10.5.0",
+    "pino-pretty": "^13.1.1",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1"
   },

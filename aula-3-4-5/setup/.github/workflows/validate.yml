@@ -1,0 +1,51 @@
+name: Validate
+
+on:
+  workflow_dispatch:  # só para rodar localmente
+  workflow_call: # permite ser chamado por outro workflow
+    # você pode definir inputs se quiser
+    inputs:
+      run-tests:
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Enable Corepack
+        run: |
+          corepack enable
+          corepack prepare yarn@4.9.2 --activate
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Copy sonar-project.properties from template
+        run: |
+          TEMPLATE=.github/ci/sonar-project-template.properties
+          TARGET=sonar-project.properties
+          if [ ! -f "$TARGET" ]; then
+            cp "$TEMPLATE" "$TARGET"
+            echo "Copied $TEMPLATE to $TARGET"
+          else
+            echo "$TARGET already exists, skipping copy"
+          fi
+
+      - name: Sonar Analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # obrigatório no GitHub Actions
+        run: |
+          npx sonar-scanner -Dsonar.token=$SONAR_TOKEN -Dsonar.host.url=http://host.docker.internal:9000

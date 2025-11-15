@@ -1,0 +1,16 @@
+# registry-cert.yaml
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: registry-cert
+  namespace: registry
+spec:
+  secretName: registry-tls
+  duration: 2160h # 90 dias
+  renewBefore: 360h # 15 dias
+  issuerRef:
+    name: selfsigned-cluster-issuer
+    kind: ClusterIssuer
+  commonName: registry.local
+  dnsNames:
+    - registry.local

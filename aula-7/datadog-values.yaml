@@ -1,0 +1,4 @@
+datadog:
+ apiKeyExistingSecret: datadog-api-key
+ clusterName: colima
+ site: datadoghq.com

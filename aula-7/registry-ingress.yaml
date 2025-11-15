@@ -1,0 +1,25 @@
+# registry-ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: registry-ingress
+  namespace: registry
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+      - registry.local
+    secretName: registry-tls
+  rules:
+  - host: registry.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: registry
+            port:
+              number: 5000

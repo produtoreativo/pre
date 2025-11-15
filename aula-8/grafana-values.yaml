@@ -1,0 +1,38 @@
+adminUser: admin
+adminPassword: strong-password
+persistence:
+  enabled: true
+  storageClassName: "local-path"
+  accessModes: ["ReadWriteOnce"]
+  size: 10Gi
+service:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 3000
+      nodePort: 3010
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  hosts:
+    - grafana.localhost
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  tls:
+    - hosts:
+      - grafana.localhost
+      secretName: grafana-tls
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prom-stack-kube-prometheus-prometheus.monitoring.svc:9090
+        access: proxy
+      - name: Loki
+        type: loki
+        url: http://loki.logging.svc:3100
+      - name: Tempo
+        type: tempo
+        url: http://tempo.tracing.svc:3200

@@ -2,6 +2,6 @@
 ## Docker compose
 
 ```sh
-cd aula-9/infra/api-gateway
+cd aula-10/infra/auth
 docker compose up -d
 ```

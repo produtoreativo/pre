@@ -39,10 +39,12 @@ resource "keycloak_openid_client" "webshop_api" {
   client_id                   = "webshop-api"
   name                        = "webshop-api"
   access_type                 = "CONFIDENTIAL"
+
   standard_flow_enabled        = false
   implicit_flow_enabled        = false
   direct_access_grants_enabled = true
   service_accounts_enabled     = true
+
 }
 
 # Expose user attribute 'tier' in token (user attribute -> claim)

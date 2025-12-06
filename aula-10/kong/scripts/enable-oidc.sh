@@ -8,7 +8,8 @@ KONG_ADMIN="http://localhost:8001"
 KEYCLOAK_URL="http://keycloak:8080"
 REALM="magasiara"
 CLIENT_ID="webshop-api"
-CLIENT_SECRET="kOFqFAYBIqnbnm4jGT4FaWcwlBfkae3J"
+# CLIENT_SECRET="kOFqFAYBIqnbnm4jGT4FaWcwlBfkae3J"
+CLIENT_SECRET=$(./get-client-secret.sh --raw)
 
 SERVICE_NAME="webshop-api"
 # SERVICE_URL="http://webshop-api:3000"

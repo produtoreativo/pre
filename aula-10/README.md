@@ -79,3 +79,39 @@ chmod +x login-create-token.sh
 #  TOKEN="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJuV3hlYUplT0JiVWN4dkhMMGxvS2t0Nl9KNjRzczQtMUk5TG1IUzExb2ZVIn0.eyJleHAiOjE3NjUwNDg1MDksImlhdCI6MTc2NTA0NjcwOSwianRpIjoiY2IyZWUwMDctNmQwMy00OTM4LWFlZTEtYzI2YzVkMzZkYTBjIiwiaXNzIjoiaHR0cDovL2tleWNsb2FrOjgwODAvcmVhbG1zL21hZ2FzaWFyYSIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJiNjY3MDJkOC00Y2YxLTQ1ZmUtYjNhNS0wZTA3YjI2ZWRlZTEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJ3ZWJzaG9wLWFwaSIsInNpZCI6ImY2MjZhMWE5LTNkOWMtNGRjZS04NWQwLTI1N2ZhNTg2ZDY2NyIsImFjciI6IjEiLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiY3VzdG9tZXI6cmVhZCIsImRlZmF1bHQtcm9sZXMtbWFnYXNpYXJhIiwib2ZmbGluZV9hY2Nlc3MiLCJjdXN0b21lcjpvcmRlcjpjcmVhdGUiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoiZW1haWwgcHJvZmlsZSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJjbWlsZm9udCIsImVtYWlsIjoiY21pbGZvbnRAZ21haWwuY29tIn0.AG0HEXZG6R10_NifrCjaL4tlwUcrQEECTcZDdGaCfmrDF1LDQRxewIdr2RqRkz0Ha6-wodzSIa9jvrLIlHy6qTc9-f5JH3C6rwLbNPpjeRfg8Uv1vtzRM7Vpzt7j1HO8IRQcT2Y0du4CNSS63XngpNQ-o4eQ-6uXivjYat3S27HkvYpf-4myeAJNykbrj2ZWU6G0mH3IUHlwWRdWxCgBppJjrayKLn6piOthAzz0Guyr8AAFB1cHTQiHqpob64EFyCrH3CpBlh8fmPsLf4biGY3OUnIeanyIos9mFrsHd3zUcgAUh2g3MinchDSpUmefW2qlp7NiZGCufUUOyj5rrg"
 
 ```
+
+### Habilitar o plugin no Kong
+
+
+Carregar o serviço no Kong:
+
+```sh
+cd aula-10/kong/scripts
+deck sync --state ./kong.yaml 
+```
+
+habilitar o plugin para webshop-api
+
+```sh
+chmod +x enable-oidc.sh
+./enable-oidc.sh
+```
+
+### Testar a aplicação
+
+Clone o projeto Webshop-api e na branch api-mgmt
+
+```sh
+docker compose -f docker-compose.dev.yml up -d
+```
+
+Observar logs nos containers dentro do Docker, o serviço e o Kong.
+
+Troque o token que pegou no passo de execução do login-create-token.sh (observe o token já expirou) no script abaixo e execute. Investigue em https://www.jwt.io/ para ver se está tudo ok.
+
+```sh
+chmod +x validate.sh
+./validate.sh
+```
+
+Pode investigar o JSON retornado em https://jsonformatter.org/ ou use o jq no script.

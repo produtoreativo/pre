@@ -1,4 +1,4 @@
 keycloak_url      = "http://keycloak:8080"
-keycloak_user     = "terraform-admin"
-keycloak_password = "terraform123"
+keycloak_user     = "admin"
+keycloak_password = "admin"
 realm             = "master"

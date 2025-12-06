@@ -83,14 +83,14 @@ curl -s -X POST \
   -H "Content-Type: application/json" \
   -d "[$ROLE_JSON]" > /dev/null
 
-echo "📄 Criando terraform.tfvars ..."
-cat > terraform.tfvars <<EOF
-keycloak_url        = "$KEYCLOAK_URL"
-admin_client_id     = "$TERRAFORM_CLIENT_ID"
-admin_client_secret = "$CLIENT_SECRET"
-EOF
+# echo "📄 Criando terraform.tfvars ..."
+# cat > terraform.tfvars <<EOF
+# keycloak_url        = "$KEYCLOAK_URL"
+# admin_client_id     = "$TERRAFORM_CLIENT_ID"
+# admin_client_secret = "$CLIENT_SECRET"
+# EOF
 
 echo "🎉 Tudo pronto!"
 echo "🔑 Client ID:     $TERRAFORM_CLIENT_ID"
 echo "🔐 Client Secret: $CLIENT_SECRET"
-echo "📄 Arquivo terraform.tfvars criado."
+# echo "📄 Arquivo terraform.tfvars criado."

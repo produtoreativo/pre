@@ -12,3 +12,9 @@ aula-2/setup/magasiara/terraform/.terraform.lock.hcl
 aula-2/setup/magasiara/terraform/terraform.tfstate
 aula-2/setup/magasiara/terraform/terraform.tfstate.backup
 aula-2/setup/magasiara/terraform/terraform.tfvars
+
+.terraform
+.terraform.lock.hcl
+
+terraform.tfstate
+terraform.tfstate.backup

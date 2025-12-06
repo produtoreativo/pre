@@ -1,0 +1,10 @@
+{
+  "headers": {
+    "x-user-claims": {
+      "userId":"5518"
+    }
+  },
+  "body": {
+    "userId": "5518"
+  }
+}

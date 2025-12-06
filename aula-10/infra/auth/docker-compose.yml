@@ -1,11 +1,10 @@
-version: "3.9"
-
 services:
   ###########################################################
   # 🗄️ POSTGRES (Kong + Keycloak + Apicurio)
   ###########################################################
   kong-database:
     image: postgres:16
+    platform: linux/amd64 # troque para sua arquitetura, se necessário
     container_name: kong-database
     environment:
       POSTGRES_USER: kong
@@ -20,6 +19,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - magasiara
 
   ###########################################################
   # 🔑 KEYCLOAK (OIDC Provider)
@@ -37,10 +38,12 @@ services:
       KC_DB_PASSWORD: kong
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HOSTNAME: localhost
+      KC_HOSTNAME: keycloak
     command: start-dev
     ports:
       - "8080:8080"
+    networks:
+      - magasiara
 
   ###########################################################
   # 🛡️ OPA – Open Policy Agent
@@ -54,6 +57,8 @@ services:
       - ./opa/policies:/policies
     ports:
       - "8181:8181"
+    networks:
+      - magasiara
 
   ###########################################################
   # 🟦 KONG Gateway
@@ -71,9 +76,11 @@ services:
       KONG_PG_PASSWORD: kong
       KONG_PG_DATABASE: kong
     command: kong migrations bootstrap
+    networks:
+      - magasiara
 
   kong:
-    image: kong:3.8
+    image: kong-oidcify
     container_name: kong
     depends_on:
       kong-database:
@@ -84,6 +91,8 @@ services:
         condition: service_started
       opa:
         condition: service_started
+    networks:
+      - magasiara
 
     environment:
       KONG_DATABASE: postgres
@@ -107,7 +116,7 @@ services:
 
       # Plugins extras
       #KONG_PLUGINS: bundled,oidc,opa
-      KONG_PLUGINS: bundled
+      KONG_PLUGINS: bundled,oidcify
 
       # Integração OPA (plugin OPA do Kong)
       #KONG_OPA_URL: http://opa:8181/v1/data/http/authz/allow
@@ -136,6 +145,12 @@ services:
       apicurio.rest.mutability.artifact-content.enabled: "true"
     ports:
       - "8085:8080"
+    networks:
+      - magasiara
 
 volumes:
   kong-db-data:
+
+networks:
+  magasiara:
+    external: true

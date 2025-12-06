@@ -1,37 +1,39 @@
-# Use a imagem oficial do Kong como base
+# ---------- STAGE 1: Build do oidcify ----------
+FROM golang:1.23 AS builder
+
+WORKDIR /build
+
+# Habilita toolchains remotos
+ENV GOTOOLCHAIN=auto
+
+# Instala o toolchain go1.25.5
+RUN go install golang.org/dl/go1.25.5@latest && \
+    /go/bin/go1.25.5 download
+
+# Clona o oidcify
+RUN git clone https://github.com/hanlaur/oidcify.git .
+
+# Usa o toolchain go1.25.5 para rodar go mod tidy
+RUN /go/bin/go1.25.5 mod tidy
+
+# Compila
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 /go/bin/go1.25.5 build -o oidcify .
+
+# ---------- STAGE 2: Kong ----------
 FROM kong:3.8
 
-# Troca para root para instalar dependências do sistema
 USER root
 
-# Atualiza e instala ferramentas de build e dependências para luarocks / compilação nativa
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-      build-essential \
-      gcc \
-      make \
-      wget \
-      unzip \
-      libssl-dev \
-      libpcre3-dev \
-      luarocks \
-      ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /build/oidcify /usr/local/bin/oidcify
 
-# Opcional: copie um arquivo com versões de rocks (se quiser pinagem)
-# COPY luarocks-versions.txt /tmp/luarocks-versions.txt
+RUN chmod +x /usr/local/bin/oidcify
 
-# Instala plugins via luarocks
-# Substitua/adicione nomes e versões conforme seu plugin real
-RUN luarocks install kong-opa || echo "kong-opa install failed" && \
-    luarocks install kong-oidc || echo "kong-oidc install failed"
+ENV KONG_PLUGINS="bundled,oidcify"
+ENV KONG_PLUGINSERVER_NAMES="oidcify"
+ENV KONG_PLUGINSERVER_OIDCIFY_QUERY_CMD="/usr/local/bin/oidcify -dump"
+ENV KONG_PLUGINSERVER_OIDCIFY_START_CMD="/usr/local/bin/oidcify"
 
-# Se precisar instalar outras dependências que os plugins requisitam, adicione aqui.
-# Exemplo (se seu plugin exigir lua-cjson):
-# RUN luarocks install lua-cjson
-
-# Permite que o processo volte a rodar como usuário kong (boa prática)
 USER kong
 
-# Entrypoint padrão do Kong (mantemos o mesmo)
-CMD ["docker-entrypoint.sh", "kong", "docker-start"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["kong", "docker-start"]

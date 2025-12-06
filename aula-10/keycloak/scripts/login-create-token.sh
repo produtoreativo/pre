@@ -5,7 +5,7 @@ set -euo pipefail
 # CONFIGURAÇÕES DO KEYCLOAK
 # ---------------------------------------------
 REALM="magasiara"
-KEYCLOAK_URL="http://localhost:8080/realms/$REALM/protocol/openid-connect/token"
+KEYCLOAK_URL="http://keycloak:8080/realms/$REALM/protocol/openid-connect/token"
 CLIENT_ID="webshop-api"
 CLIENT_SECRET=$(./get-client-secret.sh --raw)
 USERNAME="cmilfont"
@@ -69,4 +69,4 @@ echo
 echo "Expira em: ${EXPIRES_IN}s"
 echo
 echo "→ Dica: exporte o token para usar em chamadas:"
-echo "  export TOKEN=\"$ACCESS_TOKEN\""
+echo " TOKEN=\"$ACCESS_TOKEN\""

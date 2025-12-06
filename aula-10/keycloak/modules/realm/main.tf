@@ -3,6 +3,11 @@ resource "keycloak_realm" "this" {
   realm   = var.realm_name
   enabled = true
   display_name = var.realm_name
+
+  access_token_lifespan                   = "30m"
+  access_token_lifespan_for_implicit_flow = "30m"
+  sso_session_idle_timeout                = "30m"
+  sso_session_max_lifespan                = "8h"
 }
 
 # Realm roles
@@ -59,3 +64,13 @@ resource "keycloak_openid_user_attribute_protocol_mapper" "tier_mapper" {
   add_to_id_token     = true
   add_to_access_token = true
 }
+
+# resource "keycloak_openid_audience_protocol_mapper" "webshop_api_audience" {
+#   realm_id  = keycloak_realm.this.id
+#   client_id = keycloak_openid_client.webshop_api.id
+
+#   name               = "webshop-api-audience"
+#   included_client_audience = "webshop-api"
+#   add_to_access_token = true
+#   add_to_id_token     = true
+# }

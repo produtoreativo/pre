@@ -6,3 +6,9 @@ Imagem customizada do Kong já com os plugins necessários.
 #docker build -t kong-custom:3.8 .
 docker build -t kong-oidcify .
 ```
+
+Rodar sem cache
+
+```sh
+docker build --pull --no-cache -t kong-oidcify .
+```

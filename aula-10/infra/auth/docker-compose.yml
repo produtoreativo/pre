@@ -52,7 +52,7 @@ services:
     image: openpolicyagent/opa:latest
     container_name: opa
     command: >
-      run --server /policies
+      run --server --addr=0.0.0.0:8181 --set=decision_logs.console=true
     volumes:
       - ./opa/policies:/policies
     ports:
@@ -116,7 +116,7 @@ services:
 
       # Plugins extras
       #KONG_PLUGINS: bundled,oidc,opa
-      KONG_PLUGINS: bundled,oidcify
+      KONG_PLUGINS: bundled,oidcify,kong-opafy
 
       # Integração OPA (plugin OPA do Kong)
       #KONG_OPA_URL: http://opa:8181/v1/data/http/authz/allow

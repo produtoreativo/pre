@@ -63,60 +63,60 @@ const ParsedSpecSchema = z.object({
 });
 
 async function main() {
-  // console.log("== ODD GreenField Runner (v3) ==");
-  // console.log("Models:", MODELS);
-  // await assertOllamaUp();
+  console.log("== ODD GreenField Runner (v3) ==");
+  console.log("Models:", MODELS);
+  await assertOllamaUp();
 
-  // // 0) Carrega XLSX v3 -> JSON validado localmente
-  // const eventMappingV3 = loadEventMappingV3(INPUT_PATH);
-  // console.log(`Input rows: ${eventMappingV3.rows.length} (sheet: ${eventMappingV3.sheet})`);
+  // 0) Carrega XLSX v3 -> JSON validado localmente
+  const eventMappingV3 = loadEventMappingV3(INPUT_PATH);
+  console.log(`Input rows: ${eventMappingV3.rows.length} (sheet: ${eventMappingV3.sheet})`);
 
-  // // 1) XLSX v3 -> o11y.yaml (Llama)
-  // const p1 = loadPrompt("01_xlsx_v3_to_o11y.md").replace(
-  //   "{{EVENT_MAPPING_V3_JSON}}",
-  //   JSON.stringify(eventMappingV3, null, 2)
-  // );
+  // 1) XLSX v3 -> o11y.yaml (Llama)
+  const p1 = loadPrompt("01_xlsx_v3_to_o11y.md").replace(
+    "{{EVENT_MAPPING_V3_JSON}}",
+    JSON.stringify(eventMappingV3, null, 2)
+  );
 
-  // console.log("\n[1/3] Gerando o11y.yaml a partir do XLSX v3...");
-  // const o11yYamlRaw = await ollamaGenerateText(MODELS.llama, p1);
+  console.log("\n[1/3] Gerando o11y.yaml a partir do XLSX v3...");
+  const o11yYamlRaw = await ollamaGenerateText(MODELS.llama, p1);
 
-  // // >>> CORREÇÃO: extrai YAML puro (remove texto e ```yaml)
-  // const o11yYaml = extractYaml(o11yYamlRaw);
+  // >>> CORREÇÃO: extrai YAML puro (remove texto e ```yaml)
+  const o11yYaml = extractYaml(o11yYamlRaw);
 
-  // // Valida YAML básico
-  // const o11yObj = safeParseYaml(o11yYaml);
+  // Valida YAML básico
+  const o11yObj = safeParseYaml(o11yYaml);
 
-  // writeFile(ARTIFACTS.o11yYaml, o11yYaml);
-  // writeFile(ARTIFACTS.o11yJson, JSON.stringify(o11yObj, null, 2));
-  // console.log("  -> artifacts/spec/o11y.yaml");
-  // console.log("  -> artifacts/spec/o11y.json");
+  writeFile(ARTIFACTS.o11yYaml, o11yYaml);
+  writeFile(ARTIFACTS.o11yJson, JSON.stringify(o11yObj, null, 2));
+  console.log("  -> artifacts/spec/o11y.yaml");
+  console.log("  -> artifacts/spec/o11y.json");
 
-  // // 2) Parse/normalização (Qwen) -> odd_spec.json
-  // console.log("\n[2/3] Parse/Normalização do o11y.yaml -> odd_spec.json...");
-  // const p2 = loadPrompt("02_parse_o11y_to_spec.md").replace("{{O11Y_YAML}}", o11yYaml);
+  // 2) Parse/normalização (Qwen) -> odd_spec.json
+  console.log("\n[2/3] Parse/Normalização do o11y.yaml -> odd_spec.json...");
+  const p2 = loadPrompt("02_parse_o11y_to_spec.md").replace("{{O11Y_YAML}}", o11yYaml);
 
-  // const parsedRaw = await ollamaGenerateJson(MODELS.qwen, p2);
-  // const parsed = ParsedSpecSchema.parse(parsedRaw);
+  const parsedRaw = await ollamaGenerateJson(MODELS.qwen, p2);
+  const parsed = ParsedSpecSchema.parse(parsedRaw);
 
-  // if (!parsed.ok) {
-  //   writeFile(path.join(ARTIFACTS.logsDir, "parse_errors.json"), JSON.stringify(parsed, null, 2));
-  //   console.error("  ✖ Parser retornou ok=false. Veja artifacts/logs/parse_errors.json");
-  //   process.exit(2);
-  // }
+  if (!parsed.ok) {
+    writeFile(path.join(ARTIFACTS.logsDir, "parse_errors.json"), JSON.stringify(parsed, null, 2));
+    console.error("  ✖ Parser retornou ok=false. Veja artifacts/logs/parse_errors.json");
+    process.exit(2);
+  }
 
-  // writeFile(ARTIFACTS.oddSpecJson, JSON.stringify(parsed.oddSpec ?? {}, null, 2));
-  // console.log("  -> artifacts/spec/odd_spec.json");
+  writeFile(ARTIFACTS.oddSpecJson, JSON.stringify(parsed.oddSpec ?? {}, null, 2));
+  console.log("  -> artifacts/spec/odd_spec.json");
 
-  // // 3) Plano de arquitetura (Llama) -> architecture_plan.json
-  // console.log("\n[3/3] Gerando plano de arquitetura (NestJS)...");
-  // const oddSpecText = fs.readFileSync(ARTIFACTS.oddSpecJson, "utf8");
-  // const p3 = loadPrompt("03_plan_architecture.md").replace("{{ODD_SPEC_JSON}}", oddSpecText);
+  // 3) Plano de arquitetura (Llama) -> architecture_plan.json
+  console.log("\n[3/3] Gerando plano de arquitetura (NestJS)...");
+  const oddSpecText = fs.readFileSync(ARTIFACTS.oddSpecJson, "utf8");
+  const p3 = loadPrompt("03_plan_architecture.md").replace("{{ODD_SPEC_JSON}}", oddSpecText);
 
-  // const archPlan = await ollamaGenerateJson(MODELS.llama, p3);
-  // writeFile(ARTIFACTS.archPlanJson, JSON.stringify(archPlan, null, 2));
-  // console.log("  -> artifacts/plans/architecture_plan.json");
+  const archPlan = await ollamaGenerateJson(MODELS.llama, p3);
+  writeFile(ARTIFACTS.archPlanJson, JSON.stringify(archPlan, null, 2));
+  console.log("  -> artifacts/plans/architecture_plan.json");
 
-  // console.log("\n✅ Fluxo inicial concluído (v3).");
+  console.log("\n✅ Fluxo inicial concluído (v3).");
   
   // 4) NestJS Code Generator (Qwen) -> apps/generated/*
   console.log("\n[4/4] Gerando código NestJS (apps/generated/*) com Qwen...");

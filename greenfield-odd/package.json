@@ -1,0 +1,13 @@
+{
+  "name": "greenfield-odd",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "odd:run": "node tools/runner/index.js --input ./inputs/event_mapping_completo_ODD_v3.xlsx"
+  },
+  "dependencies": {
+    "yaml": "^2.4.5",
+    "xlsx": "^0.18.5",
+    "zod": "^3.25.0"
+  }
+}

@@ -1,5 +1,10 @@
+# ODD Greenfield
 
+Workflow de estudos para geração de projeto completo Greenfield a partir de um Event Sourcing
 
+## Configurações
+
+Instalação e configuração no MacBookPro M1 com 32G de RAM
 ```sh
 brew install ollama
 brew services start ollama #sobe o ollama serve
@@ -8,6 +13,15 @@ ollama pull llama3.1:8b
 ollama -v
 # ollama version is 0.17.4
 ```
+
+## Execução
+
+Foi utilizado nodejs 22 nesse repo.  
+
+```sh
+npm run odd:run
+```
+
 
 ## Racional ProdOps pra AI
 
